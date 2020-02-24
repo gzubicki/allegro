@@ -11,6 +11,7 @@ app.config.from_object('settings.default_settings')
 
 # It's to small for relocation
 class GitHubAPI(object):
+    """It's very light GitHub api client"""
     token = app.config['TOKEN']
     username = app.config['USERNAME']
     repos_url = app.config['REPOS_URL']

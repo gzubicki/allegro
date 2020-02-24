@@ -1,9 +1,10 @@
-import operator
 import datetime
 
 
+# TODO: Change to model
 # Data cache is good idea
 class GithubRepo(object):
+    """Object to store and validate github repo information"""
 
     def __init__(self, fullName, description, cloneUrl, stars, createdAt):
         self.fullName = fullName
@@ -13,14 +14,18 @@ class GithubRepo(object):
         self.stars = stars
         self.createdAt = createdAt
 
-    fullName = property(operator.attrgetter('_fullName'))
+    @property
+    def fullName(self):
+        return self._fullName
 
     @fullName.setter
     def fullName(self, s):
         if not s : raise Exception("full name can't be empty")
         self._fullName = s
 
-    stars = property(operator.attrgetter('_stars'))
+    @property
+    def stars(self):
+        return self._stars
 
     @stars.setter
     def stars(self, s):
@@ -28,7 +33,9 @@ class GithubRepo(object):
         if not (s > 0): raise Exception("stars must be greater than zero")
         self._stars = s
 
-    createdAt = property(operator.attrgetter('_createdAt'))
+    @property
+    def createdAt(self):
+        return self._createdAt
 
     @createdAt.setter
     def createdAt(self, s):
@@ -37,6 +44,7 @@ class GithubRepo(object):
 
     @staticmethod
     def fromJson(mapping):
+        """Parse GithubRepo object from json string with map, we use other variable names"""
         if mapping is None:
             return None
 
@@ -51,6 +59,8 @@ class GithubRepo(object):
 
 
 def is_expected_datetime_format(timestamp):
+    """We allow only ISO 8601 time format"""
+
     format_string = '%Y-%m-%dT%H:%M:%SZ'
     try:
         colon = timestamp[-4]

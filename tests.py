@@ -4,7 +4,6 @@ import requests
 import json
 
 from app import app
-# from app import views
 from app.views import GitHubAPI, fromJson
 from app.models import GithubRepo
 
@@ -15,20 +14,22 @@ def test_github_life():
 
 
 class TestIntegrations(unittest.TestCase):
+    """
+    Tests for api proxy.
+    It's  naughty to hit github, i prefer mock
+    """
 
     def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
 
-    def test_home_status_code(self):
-        # sends HTTP GET request to the application
-        # on the specified path
-        result = self.app.get('/')
-
-        # assert the status code of the response
-        self.assertEqual(result.status_code, 200)
+    # Github is still alive?
+#     def test_home_status_code(self):
+#         result = self.app.get('/')
+#         self.assertEqual(result.status_code, 200)
 
     def test_githubrepo_object(self):
+        """Object creation test"""
         o1 = GithubRepo(
              fullName="django/django",
              description="The Web framework for perfectionists with deadlines.",
@@ -43,6 +44,7 @@ class TestIntegrations(unittest.TestCase):
         self.assertEqual(o1.createdAt, "2012-04-28T02:47:18Z")
 
     def test_githubrepo_object_bad_date_format(self):
+        """Test with bad date format"""
         with self.assertRaises(Exception) as context:
             GithubRepo(
                  fullName="django/django",
@@ -54,6 +56,7 @@ class TestIntegrations(unittest.TestCase):
         self.assertTrue('Bad date format' in str(context.exception))
 
     def test_githubrepo_object_blank_name(self):
+        """Test without name"""
         with self.assertRaises(Exception) as context:
             GithubRepo(
                  fullName="",
@@ -65,6 +68,7 @@ class TestIntegrations(unittest.TestCase):
         self.assertTrue("full name can't be empty" in str(context.exception))
 
     def test_githubrepo_object_blank_stars(self):
+        """Test without stars"""
         with self.assertRaises(Exception) as context:
             GithubRepo(
                  fullName="Test",
@@ -76,6 +80,7 @@ class TestIntegrations(unittest.TestCase):
         self.assertTrue("stars must be integer" in str(context.exception))
 
     def test_githubrepo_object_str_stars(self):
+        """Test with stars as string"""
         with self.assertRaises(Exception) as context:
             GithubRepo(
                  fullName="Test",
@@ -86,9 +91,9 @@ class TestIntegrations(unittest.TestCase):
             )
         self.assertTrue("stars must be integer" in str(context.exception))
 
-    # Github api mock
     @patch('app.views.GitHubAPI')
     def test_api_repos(self, MockApi):
+        """Test mock api"""
         api = MockApi()
 
         api.get_repo.return_value = json.dumps({
