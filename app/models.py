@@ -13,11 +13,18 @@ class GithubRepo(object):
         self.stars = stars
         self.createdAt = createdAt
 
+    fullName = property(operator.attrgetter('_fullName'))
+
+    @fullName.setter
+    def fullName(self, s):
+        if not s : raise Exception("full name can't be empty")
+        self._fullName = s
+
     stars = property(operator.attrgetter('_stars'))
 
     @stars.setter
     def stars(self, s):
-        if not int(s): raise Exception("stars must be integer")
+        if not s or not isinstance(s, int): raise Exception("stars must be integer")
         if not (s > 0): raise Exception("stars must be greater than zero")
         self._stars = s
 
