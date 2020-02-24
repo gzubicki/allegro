@@ -4,7 +4,7 @@ import requests
 import json
 
 from app import app
-from app.views import GitHubAPI, fromJson
+from app.views import GitHubAPI, from_json
 from app.models import GithubRepo
 
 
@@ -107,7 +107,7 @@ class TestIntegrations(unittest.TestCase):
         response = api.get_repo()
         self.assertIsNotNone(response)
 
-        repo = fromJson(response, GithubRepo)
+        repo = from_json(response, GithubRepo)
         assert type(repo) is GithubRepo
         self.assertIsNotNone(repo)
 

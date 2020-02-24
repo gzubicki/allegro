@@ -49,7 +49,7 @@ def repo_information_view(owner, repo):
     if raw is not None:
         # TODO: cache data and check before api call
         try:
-            repo = fromJson(raw, GithubRepo)
+            repo = from_json(raw, GithubRepo)
             return json.dumps(repo.__dict__)
         except Exception as e:
             log.error("Failed to map {0}: {1}\n".format(str(raw), str(e)))
@@ -67,5 +67,5 @@ def internal_error(error):
     return '500 something goes wrong'
 
 
-def fromJson(msg, cls, **kwargs):
+def from_json(msg, cls, **kwargs):
     return cls.fromJson(json.loads(msg, **kwargs))
