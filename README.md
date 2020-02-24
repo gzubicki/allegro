@@ -6,7 +6,9 @@ I chose simplest solution without extensions, in my opinion use swagger, flask-r
 
 ## Nice to have 
 `virtualenvwrapper` 
+
 or installed python 3.5
+
 all command you must run in base directory "allegro"
 
 ## Install
@@ -19,11 +21,14 @@ all command you must run in base directory "allegro"
 ## Run
 Firstly add your github user and token to default_settings.py
 
-'python runp.py'
+`python runp.py`
 
 ## Run in debug mode
 
-'python run.py'
+`python run.py`
+## Usage
+
+`GET /repositories/{owner}/{repository-name}`
 
 ## Deploy
 It's simple to run on uwsgi and nginx, please use socket connection.
