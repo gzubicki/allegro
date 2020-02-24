@@ -44,7 +44,6 @@ class TestIntegrations(unittest.TestCase):
         response = api.get_repo()
         self.assertIsNotNone(response)
         self.assertIsInstance(response[0], dict)
-        print(response)
 #         assert MockApi is GitHubAPI
 
 
