@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, abort
 from app import app
 from app.models import GithubRepo
 import requests
@@ -31,13 +31,16 @@ class GitHubAPI(object):
             log.debug("Request error: {}".format(e))
             return None
 
-        if (r.status_code != 200):
+        if r.status_code == 401:
+            return abort(403, description="Bad credentials")
+        if r.status_code == 404:
+            return abort(404, description="site not found, please read documentation")
+        if r.status_code != 200:
             log.error("Github - Bad server response {} - {}".format(r.status_code, r.text))
             return None
         return r.text
 
 
-# TODO: Implement API instance as fake db connection
 api = GitHubAPI()
 
 
@@ -47,14 +50,14 @@ def repo_information_view(owner, repo):
     # FIXME: github takes only slugfy owner, repo?
     raw = api.get_repo(owner, repo)
     if raw is not None:
-        # TODO: cache data and check before api call
+        # TODO: add threading
         try:
             repo = from_json(raw, GithubRepo)
             return json.dumps(repo.__dict__)
         except Exception as e:
             log.error("Failed to map {0}: {1}\n".format(str(raw), str(e)))
 
-    return 'Something goes wrong, check repository name and user, read more in logfile'
+    return abort(500, description="Something goes wrong, check applog")
 
 
 @app.errorhandler(404)
@@ -64,7 +67,7 @@ def not_found(error):
 
 @app.errorhandler(500)
 def internal_error(error):
-    return '500 something goes wrong'
+    return '500 something goes wrong, check applog"'
 
 
 def from_json(msg, cls, **kwargs):

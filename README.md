@@ -31,7 +31,7 @@ Firstly add your github user and token to default_settings.py
 `GET /repositories/{owner}/{repository-name}`
 
 ## Deploy
-It's simple to run on uwsgi and nginx, please use socket connection.
+It's simple to run on uwsgi and nginx, please use socket connection. You can run it in multiple processes.
 
 
 ## Siege overload raport
